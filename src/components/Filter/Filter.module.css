@@ -1,0 +1,13 @@
+.input {
+    outline: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    border: 1px solid #212121;
+    width: 378px;
+    margin-left: 10px;
+}
+
+.input:focus-within {
+    border: 1px solid #ca2323;
+    box-shadow: 0px 0px 4px #ca2323;
+}
