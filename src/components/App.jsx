@@ -1,5 +1,5 @@
 import { Component } from 'react';
-
+import { v4 as uuidv4 } from 'uuid';
 import ContactList from './ContactList/ContactList';
 import Filter from './Filter/Filter';
 import ContactForm from './ContactForm/ContactForm';
@@ -15,11 +15,21 @@ export class App extends Component {
     filter: '',
   };
 
-  addContact = contact => {
+  addContact = ({ name, number }) => {
+    const { contacts } = this.state;
+    const isHasContact = contacts.find(
+      el => el.name.toLowerCase() === name.toLowerCase()
+    );
+    if (isHasContact) {
+      alert(`${ name } is already in contacts`);
+      return;
+    }
+    const contact = { id: uuidv4(), name, number };
     this.setState(prev => ({
       contacts: [...prev.contacts, contact],
     }));
   };
+
   removeContact = id => {
     this.setState(prev => ({
       contacts: prev.contacts.filter(el => el.id !== id),
@@ -38,7 +48,6 @@ export class App extends Component {
 
   render() {
     const filteredContacts = this.filterContactsList();
-
     return (
       <div>
         <h1>Phonebook</h1>
