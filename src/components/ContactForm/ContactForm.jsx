@@ -16,20 +16,20 @@ class ContactForm extends Component {
   };
 
   handleSubmit = e => {
-    e.preventDefault();
-    const { contacts, addContact } = this.props;
-    const contact = { ...this.state, id: uuidv4() };
-    const isHasContact = contacts.find(
-      el => el.name.toLowerCase() === contact.name.toLowerCase()
-    );
-    if (isHasContact) {
-      alert(`${contact.name} is alredy in contacts`);
-      return;
-    }
-
-    addContact(contact);
-    e.target.reset();
-  };
+  e.preventDefault();
+  const { contacts, addContact } = this.props;
+  const { name, number } = this.state;
+  const isHasContact = contacts.find(
+    el => el.name.toLowerCase() === name.toLowerCase()
+  );
+  if (isHasContact) {
+    alert(`${name} is already in contacts`);
+    return;
+  }
+  const contact = { id: uuidv4(), name, number };
+  addContact(contact);
+  e.target.reset();
+};
 
   render() {
     return (

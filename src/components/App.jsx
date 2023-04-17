@@ -18,8 +18,6 @@ export class App extends Component {
   addContact = contact => {
     this.setState(prev => ({
       contacts: [...prev.contacts, contact],
-      name: contact.name,
-      number: contact.number,
     }));
   };
   removeContact = id => {
@@ -53,16 +51,9 @@ export class App extends Component {
         <Filter changeFilter={this.changeFilter} />
         <ContactList
           filteredContacts={filteredContacts}
-          contacts={this.state.contacts}
           removeContact={this.removeContact}
         />
       </div>
     );
   }
 }
-
-
-
-
-
-
