@@ -1,35 +1,37 @@
 import { Component } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+
 import ContactList from './ContactList/ContactList';
+import contactsList from '../data/contacts.json';
 import Filter from './Filter/Filter';
 import ContactForm from './ContactForm/ContactForm';
 
-export class App extends Component {
+class App extends Component {
   state = {
-    contacts: [
-      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-    ],
+    contacts: contactsList,
     filter: '',
   };
 
-  addContact = ({ name, number }) => {
-    const { contacts } = this.state;
-    const isHasContact = contacts.find(
-      el => el.name.toLowerCase() === name.toLowerCase()
-    );
-    if (isHasContact) {
-      alert(`${ name } is already in contacts`);
-      return;
+  componentDidMount() {
+    const contacts =
+      JSON.parse(localStorage.getItem('contacts')) || contactsList;
+
+    this.setState({ contacts });
+  }
+
+  componentDidUpdate(prevState) {
+    if (prevState.contacts !== this.state.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
     }
-    const contact = { id: uuidv4(), name, number };
+  }
+
+  addContact = contact => {
     this.setState(prev => ({
       contacts: [...prev.contacts, contact],
+      name: contact.name,
+      number: contact.number,
     }));
   };
-
+  
   removeContact = id => {
     this.setState(prev => ({
       contacts: prev.contacts.filter(el => el.id !== id),
@@ -43,11 +45,13 @@ export class App extends Component {
 
   filterContactsList = () => {
     const { filter, contacts } = this.state;
+    // if (filter === '') return contacts;
     return contacts.filter(el => el.name.toLowerCase().includes(filter));
   };
 
   render() {
     const filteredContacts = this.filterContactsList();
+
     return (
       <div>
         <h1>Phonebook</h1>
@@ -60,9 +64,12 @@ export class App extends Component {
         <Filter changeFilter={this.changeFilter} />
         <ContactList
           filteredContacts={filteredContacts}
+          contacts={this.state.contacts}
           removeContact={this.removeContact}
         />
       </div>
     );
   }
 }
+
+export default App;
